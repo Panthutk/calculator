@@ -28,8 +28,8 @@ class Keypad(tk.Frame):
             row = i // columns
             col = i % columns
 
-            # Check if the button is an operator (+, -, *, //, **)
-            if key in ['+', '-', '*', '//', '**']:
+            # Place the button in the grid
+            if key in ['+', '-', '*', '/']:
                 button.grid(row=row, column=columns - 1, sticky=tk.NSEW)
             else:
                 button.grid(row=row, column=col, sticky=tk.NSEW)
@@ -88,7 +88,7 @@ class Keypad(tk.Frame):
 
 
 if __name__ == '__main__':
-    keys = list('789456123 0+*-//**')  # = ['7','8','9',...]
+    keys = list('789456123 0+*-/')  # = ['7','8','9',...]
 
     root = tk.Tk()
     root.title("Keypad Demo")
