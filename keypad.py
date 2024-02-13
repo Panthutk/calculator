@@ -88,7 +88,7 @@ class Keypad(tk.Frame):
 
 
 if __name__ == '__main__':
-    keys = list('789456123 0+*-/')  # = ['7','8','9',...]
+    keys = list('789456123 0.+*-/')  # = ['7','8','9',...]
 
     root = tk.Tk()
     root.title("Keypad Demo")
