@@ -24,12 +24,19 @@ class Keypad(tk.Frame):
         for i, key in enumerate(self.keynames):
             button = tk.Button(self, text=key, padx=10, pady=10,
                                command=lambda k=key: self.handle_key_press(k))
+
             row = i // columns
             col = i % columns
-            button.grid(row=row, column=col, sticky=tk.NSEW)
 
-        for i in range(columns):
+            # Check if the button is an operator (+, -, *, //, **)
+            if key in ['+', '-', '*', '//', '**']:
+                button.grid(row=row, column=columns - 1, sticky=tk.NSEW)
+            else:
+                button.grid(row=row, column=col, sticky=tk.NSEW)
+
+        for i in range(columns - 1):
             self.columnconfigure(i, weight=1)
+        self.columnconfigure(columns - 1, weight=1)
 
     def bind(self, sequence=None, func=None, add=None):
         """Bind an event handler to an event sequence."""
@@ -81,7 +88,7 @@ class Keypad(tk.Frame):
 
 
 if __name__ == '__main__':
-    keys = list('789456123 0.')  # = ['7','8','9',...]
+    keys = list('789456123 0+*-//**')  # = ['7','8','9',...]
 
     root = tk.Tk()
     root.title("Keypad Demo")
