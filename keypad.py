@@ -2,12 +2,15 @@ import tkinter as tk
 from tkinter import ttk
 
 
-#TODO Keypad should extend Frame so that it is a container
-class Keypad:
+# TODO Keypad should extend Frame so that it is a container
 
-    def __init__(self, parent, keynames=[], columns=1, **kwargs):
-        #TODO call the superclass constructor with all args except
-		# keynames and columns
+
+class Keypad(tk.Frame):
+
+    def __init__(self, parent, keynames=[], columns=3, **kwargs):
+        # TODO call the superclass constructor with all args except
+        # keynames and columns
+        tk.Frame.__init__(self, parent, **kwargs)
         self.keynames = keynames
         self.init_components(columns)
 
@@ -18,15 +21,25 @@ class Keypad:
         rows as needed.
         :param columns: number of columns to use
         """
-        pass
+        for i, key in enumerate(self.keynames):
+            button = tk.Button(self, text=key, padx=10, pady=10,
+                               command=lambda k=key: self.handle_key_press(k))
+            row = i // columns
+            col = i % columns
+            button.grid(row=row, column=col, sticky=tk.NSEW)
 
-    def bind(self, todo):
+        for i in range(columns):
+            self.columnconfigure(i, weight=1)
+
+    def bind(self, sequence=None, func=None, add=None):
         """Bind an event handler to an event sequence."""
-        #TODO Write a bind method with exactly the same parameters
+        # TODO Write a bind method with exactly the same parameters
         # as the bind method of Tkinter widgets.
         # Use the parameters to bind all the buttons in the keypad
         # to the same event handler.
-    
+        for child in self.winfo_children():
+            child.bind(sequence, func, add)
+
     def __setitem__(self, key, value) -> None:
         """Overrides __setitem__ to allow configuration of all buttons
         using dictionary syntax.
@@ -34,7 +47,8 @@ class Keypad:
         Example: keypad['foreground'] = 'red'
         sets the font color on all buttons to red.
         """
-        pass
+        for child in self.winfo_children():
+            child[key] = value
 
     def __getitem__(self, key):
         """Overrides __getitem__ to allow reading of configuration values
@@ -42,7 +56,7 @@ class Keypad:
         Example: keypad['foreground'] would return 'red' if the button
         foreground color is 'red'.
         """
-        pass
+        return self.winfo_children()[0][key]
 
     def configure(self, cnf=None, **kwargs):
         """Apply configuration settings to all buttons.
@@ -50,11 +64,21 @@ class Keypad:
         To configure properties of the frame that contains the buttons,
         use `keypad.frame.configure()`.
         """
+        super().configure(cnf, **kwargs)
+        for child in self.winfo_children():
+            child.configure(cnf, **kwargs)
 
-    #TODO Write a property named 'frame' the returns a reference to 
+    # TODO Write a property named 'frame' the returns a reference to
     # the the superclass object for this keypad.
     # This is so that a programmer can set properties of a keypad's frame,
     # e.g. keypad.frame.configure(background='blue')
+    @property
+    def frame(self):
+        return super()
+
+    def handle_key_press(self, key):
+        print(f"Keypad Key pressed: {key}")
+
 
 if __name__ == '__main__':
     keys = list('789456123 0.')  # = ['7','8','9',...]
