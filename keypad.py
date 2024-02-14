@@ -24,9 +24,8 @@ class Keypad(tk.Frame):
             row = i // columns
             col = i % columns
 
-            if key in ['+', '-', '*', '/']:
-                # Place operator buttons in the last column
-                button.grid(row=row, column=columns, sticky=tk.NSEW)
+            if key in ['+', '-', '*', '/', '^', '=']:
+                button.grid(row=row, column=col, sticky=tk.NSEW)
             else:
                 button.grid(row=row, column=col, sticky=tk.NSEW)
 
@@ -86,9 +85,10 @@ class CalculatorUI:
         self.root.title("Calculator")
 
         keys = ["7", "8", "9", "/", "4", "5", "6", "*",
-                "1", "2", "3", "-", "", "0", ".", "^", "+"]
+                "1", "2", "3", "-", " ", "0", ".", "C", "^", "+", "="]
 
-        self.entry_field = tk.Entry(self.root, font=("Arial", 18))
+        self.entry_field = tk.Entry(
+            self.root, font=("Arial", 18), justify="right")
         self.entry_field.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
         self.keypad = Keypad(self.root, keynames=keys,
