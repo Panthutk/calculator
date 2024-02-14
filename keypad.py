@@ -31,6 +31,7 @@ class Keypad(tk.Frame):
                 button.grid(row=row, column=col, sticky=tk.NSEW)
 
             self.columnconfigure(col, weight=1)
+            self.rowconfigure(row, weight=1)
 
     def bind(self, sequence=None, func=None, add=None):
         """Bind an event handler to an event sequence."""
@@ -79,21 +80,25 @@ class Keypad(tk.Frame):
         self.entry.insert(0, new_text)
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.title("Calculator")
+class CalculatorUI:
+    def __init__(self) -> None:
+        self.root = tk.Tk()
+        self.root.title("Calculator")
 
-    keys = ["7", "8", "9", "/", "4", "5", "6", "*",
-            "1", "2", "3", "-", "0", ".", "^", "+"]
-    entry_field = tk.Entry(root, font=("Arial", 18))
-    entry_field.grid(row=0, column=0, columnspan=4, sticky="nsew")
+        keys = ["7", "8", "9", "/", "4", "5", "6", "*",
+                "1", "2", "3", "-", "", "0", ".", "^", "+"]
 
-    keypad = Keypad(root, keynames=keys, columns=4, entry=entry_field)
-    keypad.grid(row=1, column=0, columnspan=4, sticky="nsew")
+        self.entry_field = tk.Entry(self.root, font=("Arial", 18))
+        self.entry_field.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
-    root.grid_rowconfigure(0, weight=1)
-    root.grid_rowconfigure(1, weight=1)
-    for col in range(4):
-        root.grid_columnconfigure(col, weight=1)
+        self.keypad = Keypad(self.root, keynames=keys,
+                             columns=4, entry=self.entry_field)
+        self.keypad.grid(row=1, column=0, columnspan=4, sticky="nsew")
 
-    root.mainloop()
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_rowconfigure(1, weight=1)
+        for col in range(4):
+            self.root.grid_columnconfigure(col, weight=1)
+
+    def run(self):
+        self.root.mainloop()
