@@ -3,7 +3,6 @@ from tkinter import ttk
 
 
 class Keypad(tk.Frame):
-
     def __init__(self, parent, keynames=[], columns=3, entry=None, **kwargs):
         tk.Frame.__init__(self, parent, **kwargs)
         self.keynames = keynames
@@ -17,6 +16,10 @@ class Keypad(tk.Frame):
         rows as needed.
         :param columns: number of columns to use
         """
+        sizegrip = ttk.Sizegrip(self)
+        sizegrip.grid(row=0, column=columns, sticky=tk.NSEW)
+        self.columnconfigure(columns, weight=1)
+
         for i, key in enumerate(self.keynames):
             button = tk.Button(self, text=key, padx=5, pady=5,
                                command=lambda k=key: self.handle_key_press(k))
@@ -24,7 +27,7 @@ class Keypad(tk.Frame):
             row = i // columns
             col = i % columns
 
-            if key in ['+', '-', '*', '/', '^', '=']:
+            if key in ['+', '-', '*', '/', '^', '=', 'ret']:
                 button.grid(row=row, column=col, sticky=tk.NSEW)
             else:
                 button.grid(row=row, column=col, sticky=tk.NSEW)
@@ -64,7 +67,7 @@ class Keypad(tk.Frame):
         super().configure(cnf, **kwargs)
         for child in self.winfo_children():
             child.configure(cnf, **kwargs)
-    # the the superclass object for this keypad.
+    # the superclass object for this keypad.
     # This is so that a programmer can set properties of a keypad's frame,
     # e.g. keypad.frame.configure(background='blue')
 
@@ -93,8 +96,18 @@ class Keypad(tk.Frame):
                 # Handle any errors during evaluation
                 self.entry.delete(0, tk.END)
                 self.entry.insert(0, "Error")
+        elif key == 'DEL':
+            # Delete the last character in the entry field
+            new_text = current_text[:-1]
+            self.entry.delete(0, tk.END)
+            self.entry.insert(0, new_text)
+        elif key == 'ret':
+            # Show the previous calculation
+            self.entry.delete(0, tk.END)
+            self.entry.insert(0, self.previous_calculation)
         else:
             # For other operators and digits
             new_text = current_text + key
             self.entry.delete(0, tk.END)
             self.entry.insert(0, new_text)
+            self.previous_calculation = current_text

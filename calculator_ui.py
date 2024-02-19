@@ -8,7 +8,7 @@ class CalculatorUI:
         self.root.title("Calculator")
 
         keys = ["7", "8", "9", "/", "4", "5", "6", "*",
-                "1", "2", "3", "-", " ", "0", ".", "C", "^", "+", "="]
+                "1", "2", "3", "-", " ", "0", ".", "C", "^", "+", "=", "DEL", "ret"]
 
         self.entry_field = tk.Entry(
             self.root, font=("Arial", 18), justify="right")
